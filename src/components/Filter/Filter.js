@@ -8,13 +8,14 @@ import Input from '../Input/Input';
 import Switch from '../Switch/Switch';
 
 import { generateLists } from '../../listsGenerator';
-const { tags, countries, names } = generateLists(mentors);
+const { tags, countries, names, languages } = generateLists(mentors);
 
 export default class Filter extends Component {
   state = {
     tag: '',
     country: '',
     name: '',
+    language: '',
     showFilters: false,
   };
 
@@ -33,6 +34,11 @@ export default class Filter extends Component {
     this.props.onNameSelected(name);
   };
 
+  onLanguageSelect = language => {
+    this.setState({ language });
+    this.props.onLanguageSelected(language);
+  };
+
   onToggleFilter = () => {
     this.setState({
       showFilters: !this.state.showFilters,
@@ -41,7 +47,7 @@ export default class Filter extends Component {
   };
 
   render() {
-    const { onToggleSwitch, clickedTag } = this.props;
+    const { onToggleSwitch, clickedTag, clickedCountry } = this.props;
     const { showFilters } = this.state;
 
     return (
@@ -62,9 +68,9 @@ export default class Filter extends Component {
           </button>
         </h3>
         <div className="inputs" aria-expanded={showFilters}>
-          <Input id="language" label="Language or technology" key="language">
+          <Input id="technology" label="Technology" key="technology">
             <AutoComplete
-              id="language"
+              id="technology"
               source={tags}
               onSelect={this.onTagSelect}
               clickedTag={clickedTag}
@@ -75,6 +81,7 @@ export default class Filter extends Component {
               id="country"
               source={countries}
               onSelect={this.onCountrySelect}
+              clickedCountry={clickedCountry}
             />
           </Input>
           <Input id="name" label="Name" key="name">
@@ -82,6 +89,13 @@ export default class Filter extends Component {
               id="name"
               source={names}
               onSelect={this.onNameSelect}
+            />
+          </Input>
+          <Input id="language" label="Language" key="language">
+            <AutoComplete
+              id="language"
+              source={languages}
+              onSelect={this.onLanguageSelect}
             />
           </Input>
           <Switch id="fav" label="My Favorites" onToggle={onToggleSwitch} />
